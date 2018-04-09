@@ -1,6 +1,6 @@
 package io.dddbyexamples.factory.demand.forecasting;
 
-interface ProductDemandRepository {
+public interface ProductDemandRepository {
     ProductDemand get(String refNo);
 
     void save(ProductDemand model);

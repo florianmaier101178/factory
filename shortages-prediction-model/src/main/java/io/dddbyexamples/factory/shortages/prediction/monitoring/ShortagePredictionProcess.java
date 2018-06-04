@@ -39,7 +39,7 @@ class ShortagePredictionProcess {
         predict(NewShortage.After.LockedParts);
     }
 
-    private void predict(NewShortage.After event) {
+    private void predict(NewShortage.After trigger) {
         ShortageForecast forecast = forecasts.get(refNo,
                 configuration.shortagePredictionDaysAhead());
 
@@ -48,7 +48,7 @@ class ShortagePredictionProcess {
         boolean areDifferent = diffPolicy.areDifferent(this.known, newlyFound.orElse(null));
         if (areDifferent && newlyFound.isPresent()) {
             this.known = newlyFound.get();
-            events.emit(new NewShortage(refNo, event, known));
+            events.emit(new NewShortage(refNo, trigger, known));
         } else if (known != null && !newlyFound.isPresent()) {
             this.known = null;
             events.emit(new ShortageSolved(refNo));

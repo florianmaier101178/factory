@@ -24,7 +24,9 @@ public class CurrentDemandProjection {
                         daily.getDate(),
                         change.getCurrent().getLevel(),
                         change.getCurrent().getSchema()));
-        currentDemandEntity.changeLevelTo(change.getCurrent().getLevel(), change.getCurrent().getSchema());
+        currentDemandEntity.changeLevelTo(
+                change.getCurrent().getLevel(),
+                change.getCurrent().getSchema());
         demandDao.save(currentDemandEntity);
     }
 }

@@ -37,33 +37,32 @@ class ShortagePredictionProcessORMRepository implements ShortagePredictionProces
         // persisted after event
     }
 
-    private void save(NewShortage event) {
+    private void saveNewValue(NewShortage event) {
         RefNoId refNo = event.getRefNo();
 
         ShortagesEntity entity = TechnicalId.get(refNo)
                 .flatMap(dao::findById)
                 .orElseGet(() -> dao.save(new ShortagesEntity(refNo.getRefNo())));
         entity.setShortage(event.getShortage());
-
-        events.emit(event);
     }
 
-    private void delete(ShortageSolved event) {
+    private void deleteValue(ShortageSolved event) {
         TechnicalId.get(event.getRefNo())
                 .ifPresent(dao::deleteById);
-
-        events.emit(event);
     }
 
     private class EventsHandler implements ShortageEvents {
+
         @Override
         public void emit(NewShortage event) {
-            save(event);
+            saveNewValue(event);
+            events.emit(event);
         }
 
         @Override
         public void emit(ShortageSolved event) {
-            delete(event);
+            deleteValue(event);
+            events.emit(event);
         }
     }
 }
